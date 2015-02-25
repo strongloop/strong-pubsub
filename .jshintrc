@@ -1,0 +1,20 @@
+{
+node: true,
+browser: true,
+eqnull: true,
+indent: 2,
+undef: true,
+unused: "vars",
+quotmark: "single",
+newcap: true,
+nonew: true,
+sub: true,
+globals: {
+describe: false,
+it: false,
+before: false,
+beforeEach: false,
+after: false,
+afterEach: false
+}
+}

@@ -1,0 +1,23 @@
+{
+  "name": "strong-channel",
+  "version": "0.0.0",
+  "description": "PubSub for Node.js, Browser, Mobile and IoT",
+  "main": "index.js",
+  "browser": "browser.js",
+  "scripts": {
+    "pretest": "jscs . && jshint .",
+    "test": "mocha"
+  },
+  "author": "Ritchie Martori",
+  "license": {
+    "name": "Dual MIT/StrongLoop",
+    "url": "https://github.com/strongloop/strong-channel/blob/master/LICENSE"
+  },
+  "devDependencies": {
+    "browserify": "^9.0.3",
+    "chai": "^1.10.0",
+    "jscs": "^1.7.3",
+    "jshint": "^2.5.6",
+    "mocha": "^1.19.0"
+  }
+}
