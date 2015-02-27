@@ -1,5 +1,5 @@
 {
-  "name": "strong-channel",
+  "name": "strong-pubsub",
   "version": "0.0.0",
   "description": "PubSub for Node.js, Browser, Mobile and IoT",
   "main": "index.js",
@@ -11,7 +11,7 @@
   "author": "Ritchie Martori",
   "license": {
     "name": "Dual MIT/StrongLoop",
-    "url": "https://github.com/strongloop/strong-channel/blob/master/LICENSE"
+    "url": "https://github.com/strongloop/strong-pubsub/blob/master/LICENSE"
   },
   "devDependencies": {
     "browserify": "^9.0.3",
