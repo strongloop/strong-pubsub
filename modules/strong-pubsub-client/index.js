@@ -1,5 +1,8 @@
 module.exports = Client;
 
+var EventEmitter = require('events').EventEmitter;
+var inherits = require('util').inherits;
+
 function noop() {};
 
 /**
@@ -29,16 +32,24 @@ function noop() {};
  * @param {Object} options See `client.options` below.
  * @param {Function} Adapter The adapter constructor.
  * @param {Object} [transport] The optional transport module implementing `require('net').createConnection()`.
- * @property {string} settings.http.path Base URL of the model HTTP route.
+ * @property {Object} options The options passed as the first argument to the `Client` constructor.
+ * @property {String} options.hostname **required** The host to connect to.
+ * @property {String} options.port **required** The port to connect to.
+ * @property {Adapter} adapter
+ * @property {Object} transport The transport module (eg. `require('net')`) if passed to the `Client` constructor.
  * @class
  */
 
 function Client(options, Adapter, transport) {
-  this.options = options;
+  EventEmitter.call(this);
+  this.options = options || {};
   this.state = null;
   this.transport = transport;
   this.adapter = new Adapter(this);
+  this.setMaxListeners(0);
 }
+
+inherits(Client, EventEmitter);
 
 /**
  * Connect to the broker or proxy.
@@ -49,6 +60,8 @@ function Client(options, Adapter, transport) {
 
 Client.prototype.connect = function(cb) {
   var state = this.state;
+  var client = this;
+  cb = cb || noop;
 
   switch(this.state) {
     case 'connected':
@@ -58,8 +71,40 @@ Client.prototype.connect = function(cb) {
       });
     break;
     default:
-      this.adapter.connect();
-      this.once('connected', cb);
+      this.state = 'connecting';
+      this.adapter.connect(function(err) {
+        if(err) return cb(err);
+        client.state = 'connected';
+        client.emit('connect');
+        cb();
+      });
+    break;
+  }
+}
+
+/**
+ * Disconnect from the broker or proxy.
+ *
+ * @callback {Function} callback Added as a `once` listener to the `connect` event.
+ * @param {Error} err A connection error (if one occured).
+ */
+
+Client.prototype.end = function(cb) {
+  var state = this.state;
+  var client = this;
+
+  switch(this.state) {
+    case 'connected':
+    case 'connecting':
+      this.state = 'closing';
+      this.adapter.end(function(err) {
+        client.state = 'closed';
+        cb(err);
+      });
+    break;
+    default:
+      // not connected
+      process.nextTick(cb);
     break;
   }
 }
@@ -86,6 +131,8 @@ Client.prototype.connect = function(cb) {
  */
 
 Client.prototype.publish = function(topic, message, options, cb) {
+  var client = this;
+
   if(typeof options === 'function') {
     cb = options;
     options = undefined;
@@ -93,14 +140,14 @@ Client.prototype.publish = function(topic, message, options, cb) {
   options = options || {};
   cb = cb || noop;
 
-  this.adapter.publish(topic, message, options, cb);
+  this.ready(function(err) {
+    if(err) return cb(err);
+    client.adapter.publish(topic, message, options, cb);
+  });
 }
 
 /**
  * Subscribe to the specified `topic` or **topic pattern**.
- *
- * @param {String} topic The topic or **topic pattern** to subscribe to.
- *
  *
  * **Topic Patterns**
  *
@@ -109,13 +156,26 @@ Client.prototype.publish = function(topic, message, options, cb) {
  * - Wildcards can be used in combination.
  * - Words are separated by the `/` character.
  *
+ * @param {String} topic The topic or **topic pattern** to subscribe to.
+ * @param {Object} [options] Options passed to the adapter.
  * @callback {Function} callback Called once the adapter has finished subscribing.
  * @param {Error} err An error object is included if an error was supplied by the adapter.
  */
 
-Client.prototype.subscribe = function(topic, cb) {
+Client.prototype.subscribe = function(topic, options, cb) {
+  var client = this;
+
+  if(typeof options === 'function') {
+    cb = options;
+    options = undefined;
+  }
+  options = options || {};
   cb = cb || noop;
-  this.adapter.subscribe(topic, cb);
+
+  this.ready(function(err) {
+    if(err) return cb(err);
+    client.adapter.subscribe(topic, options, cb);
+  });
 }
 
 /**
@@ -128,5 +188,38 @@ Client.prototype.subscribe = function(topic, cb) {
 
 Client.prototype.unsubscribe = function(topic, cb) {
   cb = cb || noop;
-  this.adapter.subscribe(topic, cb);
+  var client = this;
+  this.ready(function(err) {
+    if(err) return cb(err);
+    client.adapter.unsubscribe(topic, cb);
+  });
 }
+
+/**
+ * Provide a callback to be called once the `Client` is ready to be used.
+ *
+ * @callback {Function} callback Called once the `Client` is in a ready state or
+ * an error has occurred.
+ * @param {Error} err The connection error (if one occurred).
+ */
+
+Client.prototype.ready = function(cb) {
+  var state = this.state;
+  switch(state) {
+    case 'connected':
+      process.nextTick(cb);
+    break;
+    case 'connecting':
+      this.once('connect', function() {
+        cb();
+      });
+    break;
+    case 'closing':
+    case 'closed':
+      return cb(new Error('client is ' + state));
+    break;
+    default:
+      this.connect(cb);
+    break;
+  }
+} 
