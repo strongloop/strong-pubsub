@@ -6,12 +6,12 @@ npm install strong-pubsub
 
 ## Use
 
+TBD
+
 ## Client (strong-pubsub)
 
-- What is a Client?
-
-The Client class provides a unified pubsub client in node.js and browsers. It supports subscribing 
-to topics or topic patterns (topics + wildcards). Clients can connect to brokers or proxies that support 
+The `Client` class provides a unified pubsub client in Node.js and browsers. It supports subscribing 
+to topics or topic patterns (topics and wildcards). Clients can connect to brokers or proxies that support 
 the client.adapter’s protocol.
 
 ```js
@@ -41,7 +41,7 @@ to the broker using another (eg. STOMP).
 
 Note: some listening and connect protocol / transport combinations will not support all features of a given protocol. For example QoS settings will be not be guaranteed when a proxy is using an MQTT protocol connection and proxying the connection to a redis broker.
 
-### Creating a Proxy
+### Creating a proxy
 
 Here is an example setting up a proxy. This would proxy messages between MQTT clients and a RabbitMQ server.
 
@@ -59,7 +59,7 @@ server.on('connection', function(connection) {
 });
 ```
 
-## Message Broker
+## Message broker
 
 To distribute a message published to a topic, a client connects to a message broker. 
 Client adapters allow pubsub clients to connect to various brokers. Clients can connect directly 
