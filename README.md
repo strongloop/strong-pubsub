@@ -39,6 +39,8 @@ Proxies also allow clients to connect to brokers over a protocol that the broker
 For example, a client can connect to the proxy using one protocol (eg. MQTT) and the proxy will connect 
 to the broker using another (eg. STOMP).
 
+![Proxy](/assets/proxy.png "Pubsub Proxy")
+
 Note: some listening and connect protocol / transport combinations will not support all features of a given protocol. For example QoS settings will be not be guaranteed when a proxy is using an MQTT protocol connection and proxying the connection to a redis broker.
 
 ### Creating a proxy
@@ -64,17 +66,42 @@ server.on('connection', function(connection) {
 To distribute a message published to a topic, a client connects to a message broker. 
 Client adapters allow pubsub clients to connect to various brokers. Clients can connect directly 
 to brokers or indirectly using a proxy.
-
  
 ## Adapter
- - What is an adapter?
+
+Client adapters implement the `Client` API in a broker protocol-specific way.
  
 ## Connection
- - What is a connection?
+
+A Protocol connection implements a specific pubsub protocol in Node.js for use by strong-pubsub-proxy.
  
 ## Using Proxies, Connections and Clients Together (architecture)
+
+This diagram illustrates how messages flow between clients, proxies, servers and brokers. 
+The blue arrows represent a message published to a topic. The green arrow represents the message 
+being sent to a subscriber.
+
+![Pubsub Architecture](/assets/pubsub-arch.png "Pubsub Architecture")
  
 ## Modules / Plugins
+
+- strong-pubsub
+ - Client
+ - Browser
+- strong-pubsub-proxy
+ - Proxy
+- strong-pubsub-mqtt
+ - Client adapter
+ - Browser
+- strong-pubsub-stomp
+ - Client adapter
+ - Browser
+- strong-pubsub-redis
+ - Client adapter
+- strong-pubsub-mqtt-connection
+ - Proxy adapter
+
+
  - Connection
    - MQTT Connection
    
