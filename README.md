@@ -1,7 +1,7 @@
 ## Installation
 
 ```
-npm install strong-pubsub
+$ npm install strong-pubsub
 ```
 
 ## Use
@@ -117,7 +117,7 @@ A module (or object) that implements `net.createConnection()`.
 
 A Protocol connection implements a specific pubsub protocol in Node.js for use by strong-pubsub-proxy.
  
-## Using Proxies, Connections and Clients Together (architecture)
+## Architecture
 
 This diagram illustrates how messages flow between clients, proxies, servers and brokers. 
 The blue arrows represent a message published to a topic. The green arrow represents the message 
@@ -146,3 +146,5 @@ being sent to a subscriber.
    - MQTT Connection
    
 ## Examples
+
+TBD
