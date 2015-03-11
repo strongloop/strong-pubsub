@@ -6,7 +6,20 @@ npm install strong-pubsub
 
 ## Use
 
-TBD
+```js
+var Client = require('strong-pubsub');
+
+// two clients connecting to the same broker
+var siskel = new Client({host: 'http://my.message-broker.com', port: 3000});
+var ebert = new Client({host: 'http://my.message-broker.com', port: 3000});
+
+siskel.subscribe('movies');
+siskel.on('message', function(topic, msg) {
+ console.log(topic, msg.toString()); // => movies birdman
+});
+
+ebert.publish('movies', 'birdman');
+```
 
 ## Client (strong-pubsub)
 
@@ -70,7 +83,35 @@ to brokers or indirectly using a proxy.
 ## Adapter
 
 Client adapters implement the `Client` API in a broker protocol-specific way.
- 
+
+Specify the adapter specific options using the name as the key.
+
+```js
+{
+  mqtt: {
+    clientId: 'foobar'
+  }
+}
+```
+
+###Protocols
+
+A pubsub protcol is ...
+
+- mqtt 
+- stomp
+- ?
+
+###Transports
+
+Adapters / Clients require a tranpsort to create a connection and read / write data to / from.
+
+A module (or object) that implements `net.createConnection()`.
+
+- require('net') (tcp)
+- require('tls')
+- **in development** require('strong-pubsub-transport-primus')
+
 ## Connection
 
 A Protocol connection implements a specific pubsub protocol in Node.js for use by strong-pubsub-proxy.
