@@ -96,11 +96,12 @@ Specify the adapter specific options using the name as the key.
 
 ###Protocols
 
-A pubsub protcol is ...
+Strong-pubsub supports these two protocols:
 
-- mqtt 
-- stomp
-- ?
+- [MQTT](http://mqtt.org/) 
+- [STOMP](https://stomp.github.io/)
+
+It is possible to extend strong-pubsub to support other protocols, but that is beyond the scope of this document.
 
 ###Transports
 
@@ -108,9 +109,9 @@ Adapters / Clients require a tranpsort to create a connection and read / write d
 
 A module (or object) that implements `net.createConnection()`.
 
-- require('net') (tcp)
-- require('tls')
-- **in development** require('strong-pubsub-transport-primus')
+- The standard TCP protocol: `require('net')`
+- Transport Layer Security (TLS), a secure cryptographic protocol: `require('tls')`
+- [Primus](https://github.com/primus/primus) (in development): `require('strong-pubsub-transport-primus')`  
 
 ## Connection
 
