@@ -100,8 +100,6 @@ being sent to a subscriber.
  - Client adapter
 - strong-pubsub-mqtt-connection
  - Proxy adapter
-
-
  - Connection
    - MQTT Connection
    
