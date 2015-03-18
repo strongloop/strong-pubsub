@@ -10,5 +10,9 @@
   "license": {
     "name": "Dual MIT/StrongLoop",
     "url": "https://github.com/strongloop/strong-pubsub/blob/master/LICENSE"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.1",
+    "strong-pubsub-test": "*"
   }
 }
