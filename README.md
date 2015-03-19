@@ -127,23 +127,10 @@ being sent to a subscriber.
  
 ## Modules / Plugins
 
-- strong-pubsub
- - Client
- - Browser
-- strong-pubsub-proxy
- - Proxy
-- strong-pubsub-mqtt
- - Client adapter
- - Browser
-- strong-pubsub-stomp
- - Client adapter
- - Browser
-- strong-pubsub-redis
- - Client adapter
-- strong-pubsub-mqtt-connection
- - Proxy adapter
- - Connection
-   - MQTT Connection
+- [strong-pubsub-proxy](http://github.com/strongloop/strong-pubsub-proxy)
+- [strong-pubsub-mqtt](http://github.com/strongloop/strong-pubsub-mqtt)
+- [strong-pubsub-redis](http://github.com/strongloop/strong-pubsub-redis)
+- [strong-pubsub-connection-mqtt](http://github.com/strongloop/strong-pubsub-connection-mqtt)
    
 ## Examples
 
