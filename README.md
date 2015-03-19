@@ -6,6 +6,8 @@ $ npm install strong-pubsub
 
 ## Use
 
+**NOTE: until version `1.0.0` the set of `strong-pubsub-*` modules may change drastically!**
+
 ```js
 var Client = require('strong-pubsub');
 var Adapter = require('strong-pubsub-mqtt');
@@ -27,20 +29,6 @@ ebert.publish('movies', 'birdman');
 The `Client` class provides a unified pubsub client in Node.js and browsers. It supports subscribing 
 to topics or topic patterns (topics and wildcards). Clients can connect to brokers or proxies that support 
 the `client.adapter`’s protocol.
-
-```js
-var Client = require('strong-pubsub');
-var Adapter = require('strong-pubsub-mqtt');
-
-// create a client with a url
-var client = new Client('mqtt://localhost:3456', Adapter);
-
-// or create a client with an options object
-var client = new Client({
-  host: 'localhost',
-  port: 3456
-}, Adapter);
-```
 
 ## Proxy ([strong-pubsub-proxy](https://github.com/strongloop/strong-pubsub-proxy))
 
@@ -134,4 +122,4 @@ being sent to a subscriber.
    
 ## Examples
 
-TBD
+[See the strong-pubsub-example repo.](http://github.com/strongloop/strong-pubsub-example)
