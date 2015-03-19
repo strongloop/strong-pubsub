@@ -26,7 +26,7 @@ ebert.publish('movies', 'birdman');
 
 The `Client` class provides a unified pubsub client in Node.js and browsers. It supports subscribing 
 to topics or topic patterns (topics and wildcards). Clients can connect to brokers or proxies that support 
-the client.adapter’s protocol.
+the `client.adapter`’s protocol.
 
 ```js
 var Client = require('strong-pubsub');
@@ -42,20 +42,19 @@ var client = new Client({
 }, Adapter);
 ```
 
-## Proxy (strong-pubsub-proxy)
+## Proxy ([strong-pubsub-proxy](https://github.com/strongloop/strong-pubsub-proxy))
 
-In some cases, clients should not connect directly to a message broker. The Proxy class allows 
-clients to indirectly connect to a broker. The proxy supports hooks for injecting logic between the 
-client and the broker. Hooks allow you to implement client authentication and client action (publish, subscribe) 
-authorization using vanilla node.js.
+In some cases, clients should not connect directly to a message broker. The Proxy class allows you to create a bridge between a client connecting to your **node.js** server and a broker. It supports hooks for injecting logic before the 
+proxy performs an action on behalf of the client. Hooks allow you to implement client authentication and client action (publish, subscribe) 
+authorization using vanilla node.js (usually in place of broker specific access controls and authentication).
 
 Proxies also allow clients to connect to brokers over a protocol that the broker may not support. 
 For example, a client can connect to the proxy using one protocol (eg. MQTT) and the proxy will connect 
-to the broker using another (eg. STOMP).
+to the broker using another (eg. **Redis** or **STOMP**).
 
 ![Proxy](/assets/proxy.png "Pubsub Proxy")
 
-Note: some listening and connect protocol / transport combinations will not support all features of a given protocol. For example QoS settings will be not be guaranteed when a proxy is using an MQTT protocol connection and proxying the connection to a redis broker.
+Note: It is not possible to guarantee all features when bridging connections of one protocol to a broker that speaks another protocol. For example MQTT quality of service (`options.qos`) will be not be guaranteed when a proxy is accepting MQTT protocol connections and bridging to a redis broker.
 
 ### Creating a proxy
 
@@ -102,7 +101,7 @@ Strong-pubsub supports these two protocols:
 - [MQTT](http://mqtt.org/) 
 - [STOMP](https://stomp.github.io/)
 
-It is possible to extend strong-pubsub to support other protocols, but that is beyond the scope of this document.
+It is possible to extend **strong-pubsub** to support other protocols, but that is beyond the scope of this README.
 
 ###Transports
 
