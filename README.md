@@ -27,29 +27,27 @@ ebert.publish('movies', 'birdman');
 ## Client (strong-pubsub)
 
 The `Client` class provides a unified pubsub client in Node.js and browsers. It supports subscribing 
-to topics or topic patterns (topics and wildcards). Clients can connect to brokers or proxies that support 
+to topics or topic patterns (topics and wildcards). Clients can connect to brokers or bridges that support 
 the `client.adapter`’s protocol.
 
-## Proxy ([strong-pubsub-proxy](https://github.com/strongloop/strong-pubsub-proxy))
+## Bridge ([strong-pubsub-bridge](https://github.com/strongloop/strong-pubsub-bridge))
 
-In some cases, clients should not connect directly to a message broker. The Proxy class allows you to create a bridge between a client connecting to your **node.js** server and a broker. It supports hooks for injecting logic before the 
-proxy performs an action on behalf of the client. Hooks allow you to implement client authentication and client action (publish, subscribe) 
+In some cases, clients should not connect directly to a message broker. The Bridge class allows you to create a bridge between a client connecting to your **node.js** server and a broker. It supports hooks for injecting logic before the bridge performs an action on behalf of the client. Hooks allow you to implement client authentication and client action (publish, subscribe) 
 authorization using vanilla node.js (usually in place of broker specific access controls and authentication).
 
-Proxies also allow clients to connect to brokers over a protocol that the broker may not support. 
-For example, a client can connect to the proxy using one protocol (eg. MQTT) and the proxy will connect 
+Bridges also allow clients to connect to brokers over a protocol that the broker may not support. For example, a client can connect to the bridge using one protocol (eg. MQTT) and the bridge will connect 
 to the broker using another (eg. **Redis** or **STOMP**).
 
-![Proxy](/assets/proxy.png "Pubsub Proxy")
+![Bridge](/assets/bridge.png "Pubsub Bridge")
 
-Note: It is not possible to guarantee all features when bridging connections of one protocol to a broker that speaks another protocol. For example MQTT quality of service (`options.qos`) will be not be guaranteed when a proxy is accepting MQTT protocol connections and bridging to a redis broker.
+**Note:** It is not possible to guarantee all features when bridging connections of one protocol to a broker that speaks another protocol. For example MQTT quality of service (`options.qos`) will be not be guaranteed when a bridge is accepting MQTT protocol connections and bridging to a redis broker.
 
-### Creating a proxy
+### Creating a bridge
 
-Here is an example setting up a proxy. This would proxy messages between MQTT clients and a RabbitMQ server.
+Here is an example setting up a bridge. This would bridge messages between MQTT clients and a RabbitMQ server.
 
 ```js
-// my-proxy-server.js
+// my-bridge-server.js
 var server = require('./my-existing-server');
 
 var Adapter = require('strong-pubsub-mqtt');
@@ -58,7 +56,7 @@ var Connection = require('strong-pubsub-connection-mqtt');
 
 server.on('connection', function(connection) {
   mqttConnection = new Connection(connection);
-  var proxy = new Proxy(mqttConnection, client);
+  var bridge = new Bridge(mqttConnection, client);
 });
 ```
 
@@ -66,7 +64,7 @@ server.on('connection', function(connection) {
 
 To distribute a message published to a topic, a client connects to a message broker. 
 Client adapters allow pubsub clients to connect to various brokers. Clients can connect directly 
-to brokers or indirectly using a proxy.
+to brokers or indirectly using a bridge.
  
 ## Adapter
 
@@ -103,11 +101,11 @@ A module (or object) that implements `net.createConnection()`.
 
 ## Connection
 
-A Protocol connection implements a specific pubsub protocol in Node.js for use by strong-pubsub-proxy.
+A Protocol connection implements a specific pubsub protocol in Node.js for use by strong-pubsub-bridge.
  
 ## Architecture
 
-This diagram illustrates how messages flow between clients, proxies, servers and brokers. 
+This diagram illustrates how messages flow between clients, bridges, servers and brokers. 
 The blue arrows represent a message published to a topic. The green arrow represents the message 
 being sent to a subscriber.
 
@@ -115,7 +113,7 @@ being sent to a subscriber.
  
 ## Modules / Plugins
 
-- [strong-pubsub-proxy](http://github.com/strongloop/strong-pubsub-proxy)
+- [strong-pubsub-bridge](http://github.com/strongloop/strong-pubsub-bridge)
 - [strong-pubsub-mqtt](http://github.com/strongloop/strong-pubsub-mqtt)
 - [strong-pubsub-redis](http://github.com/strongloop/strong-pubsub-redis)
 - [strong-pubsub-connection-mqtt](http://github.com/strongloop/strong-pubsub-connection-mqtt)

@@ -8,7 +8,7 @@ function noop() {};
 /**
  * The Client class provides a unified pubsub client in node.js and browsers. It
  * supports subscribing to topics or topic patterns (topics + wildcards). Clients
- * can connect to brokers or proxies that support the client.adapter’s protocol.
+ * can connect to brokers or bridges that support the client.adapter’s protocol.
  *
  * ```js
  * var Client = require('strong-pubsub');
@@ -52,7 +52,7 @@ function Client(options, Adapter, transport) {
 inherits(Client, EventEmitter);
 
 /**
- * Connect to the broker or proxy.
+ * Connect to the broker or bridge.
  *
  * @callback {Function} callback Added as a `once` listener to the `connect` event.
  * @param {Error} err A connection error (if one occured).
@@ -83,7 +83,7 @@ Client.prototype.connect = function(cb) {
 }
 
 /**
- * Disconnect from the broker or proxy.
+ * Disconnect from the broker or bridge.
  *
  * @callback {Function} callback Added as a `once` listener to the `connect` event.
  * @param {Error} err A connection error (if one occured).
