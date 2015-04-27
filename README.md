@@ -109,7 +109,7 @@ This diagram illustrates how messages flow between clients, bridges, servers and
 The blue arrows represent a message published to a topic. The green arrow represents the message 
 being sent to a subscriber.
 
-![Pubsub Architecture](/assets/pubsub-arch.png "Pubsub Architecture")
+![Pubsub Architecture](/assets/pubsub-arch.png?v2 "Pubsub Architecture")
  
 ## Modules / Plugins
 
