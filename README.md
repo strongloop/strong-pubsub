@@ -38,7 +38,7 @@ authorization using vanilla node.js (usually in place of broker specific access 
 Bridges also allow clients to connect to brokers over a protocol that the broker may not support. For example, a client can connect to the bridge using one protocol (eg. MQTT) and the bridge will connect 
 to the broker using another (eg. **Redis** or **STOMP**).
 
-![Bridge](/assets/bridge.png "Pubsub Bridge")
+![Bridge](https://github.com/strongloop/strong-pubsub/blob/master/assets/bridge.png "Pubsub Bridge")
 
 **Note:** It is not possible to guarantee all features when bridging connections of one protocol to a broker that speaks another protocol. For example MQTT quality of service (`options.qos`) will be not be guaranteed when a bridge is accepting MQTT protocol connections and bridging to a redis broker.
 
@@ -109,7 +109,7 @@ This diagram illustrates how messages flow between clients, bridges, servers and
 The blue arrows represent a message published to a topic. The green arrow represents the message 
 being sent to a subscriber.
 
-![Pubsub Architecture](/assets/pubsub-arch.png?v2 "Pubsub Architecture")
+![Pubsub Architecture](https://github.com/strongloop/strong-pubsub/raw/master/assets/pubsub-arch.png?v2 "Pubsub Architecture")
  
 ## Modules / Plugins
 
