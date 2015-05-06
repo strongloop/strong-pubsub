@@ -60,6 +60,19 @@ server.on('connection', function(connection) {
 });
 ```
 
+This example shows how to connect a `Client` to a `Bridge` and then a `Bridge` to a broker (using another `Client`).
+
+```js
+server.on('connection', function(connection) {
+  var bridge = new Bridge(
+    new MqttConnection(connection),
+    new Client({port: MOSQUITTO_PORT}, Adapter)
+  );
+
+  bridge.connect();
+});
+```
+
 ## Message broker
 
 To distribute a message published to a topic, a client connects to a message broker. 
@@ -98,6 +111,49 @@ A module (or object) that implements `net.createConnection()`.
 - The standard TCP protocol: `require('net')`
 - Transport Layer Security (TLS), a secure cryptographic protocol: `require('tls')`
 - [Primus](https://github.com/primus/primus) (in development): `require('strong-pubsub-transport-primus')`  
+
+## Transport swapping
+
+This example shows how to switch betweenn different transports on the client.
+
+```js
+//
+// client side transport switching
+//
+var Adapter = require('strong-pubsub-mqtt');
+
+// default
+var TcpTransport = require('net'); // tcp (the default)
+var client = new Client({host: 'localhost', port: 3000}, Adapter, TcpTransport);
+
+// primus
+var PrimusTransport = require('strong-pubsub-primus');
+var client = new Client({host: 'localhost', port: 3000}, Adapter, PrimusTransport);
+
+// tls
+var TlsTransport = require('tls');
+var client = new Client({host: 'localhost', port: 3000}, Adapter, TlsTransport);
+
+//
+// bridge transport swapping
+//
+var primusServer = PrimusTransport.createServer();
+var tlsServer = TlsTransport.createServer();
+var tcpServer = TcpTransport.createServer();
+
+primusServer.on('connection', bridgeConnection);
+tlsServer.on('connection', bridgeConnection);
+tcpServer.on('connection', bridgeConnection);
+
+function bridgeConnection(connection) {
+  var bridge = new Bridge(
+    new MqttConnection(connection),
+    new Client({port: MOSQUITTO_PORT}, Adapter)
+  );
+
+  bridge.connect();
+}
+```
 
 ## Connection
 
