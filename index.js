@@ -1,6 +1,6 @@
 module.exports = Client;
 
-var EventEmitter = require('events').EventEmitter;
+var Duplex = require('stream').Duplex;
 var inherits = require('util').inherits;
 
 function noop() {};
@@ -41,15 +41,51 @@ function noop() {};
  */
 
 function Client(options, Adapter, transport) {
-  EventEmitter.call(this);
+  var client = this;
+
   this.options = options || {};
+  var streamOptions = options.stream || {};
+  streamOptions.readableObjectMode = true;
+  streamOptions.writeableObjectMode = true;
+
+  Duplex.call(this, streamOptions);
+
   this.state = null;
   this.transport = transport;
   this.adapter = new Adapter(this);
   this.setMaxListeners(0);
+  this.incomingQueue = [];
+
+  this.on('message', function(topic, msg, options) {
+    this.incomingQueue.push({
+      topic: topic,
+      payload: msg,
+      options: options
+    });
+  });
 }
 
-inherits(Client, EventEmitter);
+inherits(Client, Duplex);
+
+/*!
+ *
+ */
+
+Client.prototype._read = function(size) {
+  while(size--) {
+    this.push(this.incomingQueue.shift());
+  }
+}
+
+/*!
+ *
+ */
+
+Client.prototype._write = function(size) {
+  while(size--) {
+    this.push(this.incomingQueue.shift());
+  }
+}
 
 /**
  * Connect to the broker or bridge.
@@ -222,4 +258,4 @@ Client.prototype.ready = function(cb) {
       this.connect(cb);
     break;
   }
-} 
+}
