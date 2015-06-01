@@ -13,8 +13,8 @@ var Client = require('strong-pubsub');
 var Adapter = require('strong-pubsub-mqtt');
 
 // two clients connecting to the same broker
-var siskel = new Client({host: 'http://my.message-broker.com', port: 3000}, Adapter);
-var ebert = new Client({host: 'http://my.message-broker.com', port: 3000}, Adapter);
+var siskel = new Client({host: 'my.message-broker.com', port: 3000}, Adapter);
+var ebert = new Client({host: 'my.message-broker.com', port: 3000}, Adapter);
 
 siskel.subscribe('movies');
 siskel.on('message', function(topic, msg) {
